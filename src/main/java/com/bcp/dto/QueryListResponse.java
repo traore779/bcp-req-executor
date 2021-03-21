@@ -18,8 +18,5 @@ public class QueryListResponse {
 		this.requetes = requetes;
 	}
 
-
-	
-	
 }
 

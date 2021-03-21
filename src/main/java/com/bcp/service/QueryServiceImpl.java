@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import com.opencsv.CSVWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +50,7 @@ public class QueryServiceImpl implements QueryService {
 			dto = new QueryObjectDto();
 			dto.setId(model.getId());
 			dto.setDescription((model.getDescription()));
-			dto.setRequest((model.getRequest()));
+			dto.setRequest(model.getRequest());
 			dtoList.add(dto);
 		}
 
@@ -60,17 +59,39 @@ public class QueryServiceImpl implements QueryService {
 
 	@Override
 	public void executeRequest(long id) throws Exception {
-		Optional<QueryObjectModel> queryObjectModel = queryRepository.findById(id);
+		QueryObjectModel queryObjectModel = queryRepository.findById(id).get();
+		String query = queryObjectModel.getRequest();
 
-		PreparedStatement ps = con.prepareStatement(queryObjectModel.get().getRequest());
-		//System.out.println(queryObjectModel.get().getRequest());
-		ResultSet rs = ps.executeQuery();
+		if(query != null) {
+			File file = new File("/home/traore/exemple1.csv");
+			//System.out.println(file.createNewFile());
+			//file.setWritable(true, false);
+			String motsQuery[] = query.split(" ");
+			StringBuilder requestBuilder = new StringBuilder(motsQuery[0] + " ");
+			int i;
+			for (i = 1; i < motsQuery.length; i++) {
+				if (!motsQuery[i].toLowerCase().equals("from"))
+					requestBuilder.append(motsQuery[i] + " ");
+				else
+					break;
+			}
 
-		//Export vers le fichier csv ;;;;; veuillez changer le chemmin
-		CSVWriter writer = new CSVWriter(new FileWriter("/home/traore/essai.csv"));
-		writer.writeAll(rs, true);
+			requestBuilder.append("INTO " + file +
+					" FIELD TERMINATED BY ', ' OPTIONALLY ENCLOSED BY '\"' " +
+					"LINES TERMINATED BY '\\n' ");
+
+			for (int j = i; j < motsQuery.length; j++)
+				requestBuilder.append(motsQuery[j] + " ");
+
+			String request = requestBuilder.toString() + ";";
+
+			PreparedStatement ps = con.prepareStatement(request);
+			System.out.println(request);
+			//ResultSet rs = ps.executeQuery();
+		}
+		else
+			System.out.println("Entrer une requete");
 	}
-
 
 	@Override
 	public void queryExecute(long id) throws Exception {
