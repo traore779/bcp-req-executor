@@ -2,21 +2,17 @@ package com.bcp.service;
 
 import java.io.*;
 import java.sql.*;
-import java.util.ArrayList;
 
 import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bcp.dao.QueryRepository;
 
-import com.bcp.dto.QueryObjectDto;
 import com.bcp.model.QueryObjectModel;
 import com.mysql.cj.jdbc.Driver;
 
@@ -41,20 +37,9 @@ public class QueryServiceImpl implements QueryService {
 	}
 
 	@Override
-	public List<QueryObjectDto> getListeRequetes() {
-
+	public List<QueryObjectModel> getListeRequetes() {
 		List<QueryObjectModel> queriesList = queryRepository.findAll();
-		List<QueryObjectDto> dtoList = new ArrayList<>();
-		QueryObjectDto dto;
-		for (QueryObjectModel model : queriesList) {
-			dto = new QueryObjectDto();
-			dto.setId(model.getId());
-			dto.setDescription((model.getDescription()));
-			dto.setRequest(model.getRequest());
-			dtoList.add(dto);
-		}
-
-		return dtoList;
+		return queriesList;
 	}
 
 	@Override
