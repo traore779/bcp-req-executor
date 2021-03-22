@@ -48,7 +48,7 @@ public class QueryServiceImpl implements QueryService {
 		String query = queryObjectModel.getRequest();
 
 		if(query != null) {
-			File file = new File("/home/traore/exemple1.csv");
+			File file = new File("/home/traore/exemple2.csv");
 			//System.out.println(file.createNewFile());
 			//file.setWritable(true, false);
 			String motsQuery[] = query.split(" ");

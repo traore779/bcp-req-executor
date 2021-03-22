@@ -40,9 +40,9 @@ public class QueriesController {
 
 	@GetMapping("api/requetes/executer/{id}")
 	public void executeRequest(@PathVariable(value = "id") long id) throws Exception{
-		queryService.executeRequest(id);
+		System.out.println("We are here..........");
+		this.queryService.executeRequest(id);
 	}
-
 
 	// convert queryModel to queryDto
 	private QueryObjectDto convertToDto(QueryObjectModel queryObjectModel){
