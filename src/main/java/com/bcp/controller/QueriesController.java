@@ -10,19 +10,14 @@ import com.bcp.model.QueryObjectModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bcp.dto.QueryObjectDto;
 import com.bcp.service.QueryService;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class QueriesController {
 	
 	@Autowired
@@ -31,7 +26,7 @@ public class QueriesController {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	@GetMapping(value = "api/requetes/afficher")
+	@GetMapping(value = "api/requetes")
 	public List<QueryObjectDto> getQueries() {
 		List<QueryObjectModel> queries = queryService.getListeRequetes();
 		return queries.stream().map(this::convertToDto).collect(Collectors.toList());
